@@ -22,19 +22,17 @@ function App() {
 
   const initializeData = async () => {
     try {
-      // Initialize default users
-      const initResponse = await fetch(`${API_BASE}/init`)
-      const initResult = await initResponse.json()
+      console.log('Loading data with API:', API_BASE)
       
-      // Fetch all data
+      // Fetch all data directly (no initialization needed)
       await Promise.all([
         fetchUsers(),
         fetchLeaderboard(),
         fetchHistory()
       ])
     } catch (error) {
-      console.error('Error initializing data:', error)
-      alert('Error connecting to server. Please make sure the backend is running on port 5000.')
+      console.error('Error loading data:', error)
+      alert(`Error connecting to server: ${error.message}. Please check if the backend is running.`)
     }
   }
 

@@ -62,24 +62,6 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is working!', timestamp: new Date().toISOString() });
 });
 
-// Create initial users if not exist
-app.get('/api/init', async (req, res) => {
-  try {
-    const names = ['Rahul', 'Kamal', 'Sanak', 'Amit', 'Priya', 'Neha', 'Vikas', 'Rohit', 'Simran', 'Ankit'];
-    const count = await User.countDocuments();
-    if (count === 0) {
-      await User.insertMany(names.map(name => ({ name })));
-      console.log('Users initialized successfully');
-      return res.json({ message: 'Users initialized.' });
-    }
-    console.log('Users already exist');
-    res.json({ message: 'Users already exist.' });
-  } catch (error) {
-    console.error('Error initializing users:', error);
-    res.status(500).json({ error: 'Failed to initialize users' });
-  }
-});
-
 // Reset database (for development/testing)
 app.post('/api/reset', async (req, res) => {
   try {
