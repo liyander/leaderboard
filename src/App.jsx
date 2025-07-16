@@ -13,7 +13,7 @@ function App() {
   const [lastClaimedPoints, setLastClaimedPoints] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const API_BASE = 'http://localhost:5000/api'
+  const API_BASE = 'https://leaderboard-0f0y.onrender.com/api'
 
   // Initialize users and fetch data
   useEffect(() => {
