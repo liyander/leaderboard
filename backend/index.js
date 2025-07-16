@@ -4,9 +4,40 @@ import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+
+// More flexible CORS configuration for production
 app.use(cors({
-  origin: ['http://localhost:5173','https://leaderboard-rouge-iota.vercel.app/', 'http://localhost:5174', 'http://localhost:5175'],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174', 
+      'http://localhost:5175',
+      'https://leaderboard-rouge-iota.vercel.app',
+      /https:\/\/.*\.vercel\.app$/,  // Allow all Vercel deployments
+    ];
+    
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (typeof allowedOrigin === 'string') {
+        return origin === allowedOrigin;
+      } else if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return false;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 mongoose.connect('mongodb+srv://cyberghost:Arcangel2004@cluster0.2oauzmf.mongodb.net/leaderboard?retryWrites=true&w=majority&appName=Cluster0', {
